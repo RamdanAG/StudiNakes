@@ -10,8 +10,8 @@ const featuredTrainings = [
     discount: "20%",
     sales: 15,
     rating: 5.0,
-    imgUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-    avatarUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
+    imgUrl: "/images/Trainings/kedokteran.jpg",
+    avatarUrl: "/images/avatars/asep.jpg",
   },
   {
     id: 2,
@@ -20,76 +20,91 @@ const featuredTrainings = [
     originalPrice: "2,000.00",
     discountPrice: "1,600.00",
     discount: "20%",
-    sales: 15,
+    sales: 18,
     rating: 5.0,
-    imgUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-    avatarUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
+    imgUrl: "/images/Trainings/keperawatan.jpg",
+    avatarUrl: "/images/avatars/jane.jpg",
   },
   {
     id: 3,
     title: "Kebidanan",
-    instructor: "Jane Cooper",
+    instructor: "Sarah Johnson",
     originalPrice: "2,000.00",
     discountPrice: "1,600.00",
     discount: "20%",
-    sales: 15,
-    rating: 5.0,
-    imgUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-    avatarUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
+    sales: 22,
+    rating: 4.9,
+    imgUrl: "/images/Trainings/kebidanan.jpg",
+    avatarUrl: "/images/avatars/sarah.jpg",
   },
   {
     id: 4,
     title: "Farmasi",
-    instructor: "Jane Cooper",
+    instructor: "Michael Brown",
     originalPrice: "2,000.00",
     discountPrice: "1,600.00",
-    discount: "20%",
-    sales: 15,
-    rating: 5.0,
-    imgUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-    avatarUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-  },
-  {
-    id: 5,
-    title: "Gizi Klinik",
-    instructor: "Asep Priyadi",
-    originalPrice: "2,000.00",
-    discountPrice: "1,600.00",
-    discount: "20%",
-    sales: 10,
+    discount: "15%",
+    sales: 12,
     rating: 4.8,
-    imgUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
-    avatarUrl: "/images/Trainings/ilustrasi-dokter-5sclY.jpg",
+    imgUrl: "/images/Trainings/farmasi.jpg",
+    avatarUrl: "/images/avatars/michael.jpg",
+  },
+    {
+    id: 5,
+    title: "Farmasi",
+    instructor: "Michael Brown",
+    originalPrice: "2,000.00",
+    discountPrice: "1,600.00",
+    discount: "15%",
+    sales: 12,
+    rating: 4.8,
+    imgUrl: "/images/Trainings/farmasi.jpg",
+    avatarUrl: "/images/avatars/michael.jpg",
+  },
+    {
+    id: 6,
+    title: "Farmasi",
+    instructor: "Michael Brown",
+    originalPrice: "2,000.00",
+    discountPrice: "1,600.00",
+    discount: "15%",
+    sales: 12,
+    rating: 4.8,
+    imgUrl: "/images/Trainings/farmasi.jpg",
+    avatarUrl: "/images/avatars/michael.jpg",
   },
 ];
 
-// --- Star Rating ---
 const StarRating = ({ rating, sales }) => {
-  const stars = "★".repeat(Math.floor(rating)) + "☆".repeat(5 - Math.floor(rating));
-  const reviewCount = Math.round(sales * 0.66);
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
   return (
-    <div className="d-flex align-items-center">
-      <span className="text-warning me-1" style={{ fontSize: "1.2em" }}>{stars}</span>
-      <span className="text-muted" style={{ fontSize: "0.9em" }}>
-        {rating} ({reviewCount})
-      </span>
+    <div className="d-flex align-items-center gap-2">
+      <div className="d-flex gap-1">
+        {[...Array(fullStars)].map((_, i) => (
+          <i key={`full-${i}`} className="bi bi-star-fill text-warning"></i>
+        ))}
+        {hasHalfStar && <i className="bi bi-star-half text-warning"></i>}
+        {[...Array(emptyStars)].map((_, i) => (
+          <i key={`empty-${i}`} className="bi bi-star text-warning"></i>
+        ))}
+      </div>
+      <small className="text-muted">({Math.round(rating)})</small>
     </div>
   );
 };
 
-// --- Main Component ---
 export default function HomeCardFeaturedTrainings() {
-  const cardWidth = 290;
-  const cardGap = 25;
-  const cardsPerView = 4;
-
   const scrollRef = useRef(null);
-  const totalCards = featuredTrainings.length;
-  const totalPages = Math.ceil(totalCards / cardsPerView);
-
   const [pageIndex, setPageIndex] = useState(0);
+  const cardsPerView = 4;
+  const cardWidth = 280;
+  const cardGap = 20;
 
-  // Scroll ke halaman tertentu
+  const totalPages = Math.ceil(featuredTrainings.length / cardsPerView);
+
   const scrollToPage = (index) => {
     if (!scrollRef.current) return;
     const scrollPos = index * (cardWidth + cardGap) * cardsPerView;
@@ -97,215 +112,178 @@ export default function HomeCardFeaturedTrainings() {
     setPageIndex(index);
   };
 
-  const scrollNext = () => {
-    if (pageIndex < totalPages - 1) scrollToPage(pageIndex + 1);
-  };
-
-  const scrollPrev = () => {
-    if (pageIndex > 0) scrollToPage(pageIndex - 1);
-  };
-
-  // Hitung index aktif saat scroll
   const handleScroll = () => {
-    const element = scrollRef.current;
-    if (!element) return;
-    const newPage = Math.round(
-      element.scrollLeft / ((cardWidth + cardGap) * cardsPerView)
-    );
+    if (!scrollRef.current) return;
+    const newPage = Math.round(scrollRef.current.scrollLeft / ((cardWidth + cardGap) * cardsPerView));
     setPageIndex(newPage);
   };
 
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", handleScroll, { passive: true });
-    return () => el.removeEventListener("scroll", handleScroll);
+    if (el) el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el?.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="container py-5">
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h2 className="fw-bold">
-            Featured <span style={{ color: "#269ece" }}>Trainings</span>
-          </h2>
-          <p className="text-muted">
-            Gabung di kategori unggulan, dapatkan pengetahuan yang akan membantu perjalanan belajarmu.
-          </p>
+    <section className="py-5">
+      <div className="container">
+        {/* Header */}
+        <div className="d-flex justify-content-between align-items-start mb-5">
+          <div>
+            <h2 className="fw-bold mb-2">
+              Featured <span style={{ color: '#269ece' }}>Trainings</span>
+            </h2>
+            <p className="text-muted">
+              Gabung di kategori unggulan, dapatkan pengetahuan yang akan membantu perjalanan belajarmu.
+            </p>
+          </div>
+          <a href="#" className="text-decoration-none fw-semibold" style={{ color: '#269ece' }}>
+            View All Trainings <i className="bi bi-arrow-right ms-2"></i>
+          </a>
         </div>
-        <a href="#" className="text-decoration-none fw-semibold" style={{ color: "#269ece" }}>
-          View All Trainings &rarr;
-        </a>
-      </div>
 
-      {/* Carousel Container */}
-      <div className="position-relative">
-        <div
-          ref={scrollRef}
-          className="d-flex overflow-auto pb-3"
-          style={{
-            gap: `${cardGap}px`,
-            scrollSnapType: "x mandatory",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitOverflowScrolling: "touch",
-          }}
-        >
-          <style jsx="true">{`
-            .overflow-auto::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
+        {/* Carousel */}
+        <div className="position-relative">
+          <div
+            ref={scrollRef}
+            className="d-flex overflow-auto pb-3"
+            style={{
+              gap: `${cardGap}px`,
+              scrollSnapType: "x mandatory",
+              scrollbarWidth: "none",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            <style>{`.d-flex::-webkit-scrollbar { display: none; }`}</style>
 
-          {featuredTrainings.map((item) => (
-            <div
-              key={item.id}
-              className="card border-0 shadow-sm"
-              style={{
-                minWidth: `${cardWidth}px`,
-                borderRadius: "12px",
-                overflow: "hidden",
-                scrollSnapAlign: "start",
-              }}
-            >
-              <div className="position-relative">
-                <img
-                  src={item.imgUrl}
-                  className="card-img-top"
-                  alt={item.title}
-                  style={{ height: "180px", objectFit: "cover" }}
-                />
-                <div className="position-absolute top-0 end-0 m-3">
+            {featuredTrainings.map((item) => (
+              <div
+                key={item.id}
+                className="card border-0 shadow-sm"
+                style={{
+                  minWidth: `${cardWidth}px`,
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  scrollSnapAlign: 'start',
+                  transition: 'box-shadow 0.3s ease'
+                }}
+              >
+                {/* Image Section */}
+                <div className="position-relative">
+                  <img
+                    src={item.imgUrl}
+                    className="card-img-top"
+                    alt={item.title}
+                    style={{ height: '160px', objectFit: 'cover' }}
+                  />
                   <span
-                    className="badge text-dark fw-bold"
+                    className="position-absolute top-0 end-0 m-2 badge fw-bold"
                     style={{
-                      backgroundColor: "white",
-                      borderRadius: "4px",
-                      padding: "0.4em 0.8em",
-                      fontSize: "0.85rem",
+                      backgroundColor: 'white',
+                      color: '#269ece',
+                      borderRadius: '4px',
+                      padding: '0.4rem 0.8rem'
                     }}
                   >
-                    <span className="text-success me-1">•</span>
                     {item.discount} OFF
                   </span>
-                </div>
-                <div
-                  className="position-absolute bottom-0 w-100 p-3"
-                  style={{
-                    background:
-                      "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
-                  }}
-                >
-                  <h5 className="card-title text-white fw-bold mb-0">
-                    {item.title}
-                  </h5>
-                </div>
-              </div>
-
-              <div className="card-body p-3">
-                <div className="d-flex align-items-center mb-2">
-                  <img
-                    src={item.avatarUrl}
-                    alt={item.instructor}
-                    className="rounded-circle me-2"
+                  <div
+                    className="position-absolute bottom-0 w-100 p-3"
                     style={{
-                      width: "30px",
-                      height: "30px",
-                      objectFit: "cover",
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)'
                     }}
-                  />
-                  <small
-                    className="text-muted fw-semibold"
-                    style={{ fontSize: "0.8rem" }}
                   >
-                    {item.instructor}
-                  </small>
+                    <h6 className="text-white fw-bold mb-0">{item.title}</h6>
+                  </div>
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <div className="d-flex align-items-center">
-                      <span
-                        className="fw-bold me-2"
-                        style={{ fontSize: "1.2rem", color: "#269ece" }}
-                      >
-                        Rp{item.discountPrice}
-                      </span>
-                      <span
-                        className="text-decoration-line-through text-muted"
-                        style={{ fontSize: "0.9rem" }}
-                      >
-                        Rp{item.originalPrice}
-                      </span>
-                    </div>
-                    <div className="d-flex align-items-center mt-1">
-                      <small className="text-muted me-2">
-                        {item.sales} sales
-                      </small>
-                      <StarRating rating={item.rating} sales={item.sales} />
-                    </div>
+                {/* Body Section */}
+                <div className="card-body p-3">
+                  {/* Instructor */}
+                  <div className="d-flex align-items-center mb-3">
+                    <img
+                      src={item.avatarUrl}
+                      alt={item.instructor}
+                      className="rounded-circle me-2"
+                      style={{ width: '28px', height: '28px', objectFit: 'cover' }}
+                    />
+                    <small className="text-muted fw-semibold">{item.instructor}</small>
                   </div>
 
-                  <button className="btn btn-light rounded-circle p-2 border">
-                    <span className="text-muted" style={{ fontSize: "1.1rem" }}>
-                      &#9829;
-                    </span>
-                  </button>
+                  {/* Price & Rating */}
+                  <div className="d-flex justify-content-between align-items-start gap-2">
+                    <div className="flex-grow-1">
+                      <div className="d-flex gap-2 align-items-center mb-2">
+                        <span className="fw-bold text-primary" style={{ fontSize: '1.1rem' }}>
+                          Rp{item.discountPrice}
+                        </span>
+                        <span className="text-decoration-line-through text-muted" style={{ fontSize: '0.85rem' }}>
+                          Rp{item.originalPrice}
+                        </span>
+                      </div>
+                      <div className="d-flex gap-2 align-items-center">
+                        <small className="text-muted">{item.sales} sales</small>
+                        <StarRating rating={item.rating} sales={item.sales} />
+                      </div>
+                    </div>
+                    <button className="btn btn-sm btn-light border rounded-circle p-2">
+                      <i className="bi bi-heart text-danger"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={() => scrollToPage(pageIndex - 1)}
+            disabled={pageIndex === 0}
+            className="btn btn-light rounded-circle shadow-sm position-absolute top-50 start-0 translate-middle-y"
+            style={{
+              width: '40px',
+              height: '40px',
+              zIndex: 10,
+              marginLeft: '-60px',
+              opacity: pageIndex === 0 ? 0.5 : 1
+            }}
+          >
+            <i className="bi bi-chevron-left"></i>
+          </button>
+          <button
+            onClick={() => scrollToPage(pageIndex + 1)}
+            disabled={pageIndex >= totalPages - 1}
+            className="btn btn-light rounded-circle shadow-sm position-absolute top-50 end-0 translate-middle-y"
+            style={{
+              width: '40px',
+              height: '40px',
+              zIndex: 10,
+              marginRight: '-60px',
+              opacity: pageIndex >= totalPages - 1 ? 0.5 : 1
+            }}
+          >
+            <i className="bi bi-chevron-right"></i>
+          </button>
         </div>
 
-        {/* Arrows */}
-        <button
-          onClick={scrollPrev}
-          disabled={pageIndex === 0}
-          className="btn btn-light rounded-circle shadow-sm position-absolute top-50 start-0 translate-middle p-2"
-          style={{
-            width: "40px",
-            height: "40px",
-            zIndex: 10,
-            opacity: pageIndex === 0 ? 0.5 : 1,
-          }}
-          aria-label="Previous"
-        >
-          &lt;
-        </button>
-        <button
-          onClick={scrollNext}
-          disabled={pageIndex === totalPages - 1}
-          className="btn btn-light rounded-circle shadow-sm position-absolute top-50 end-0 translate-middle p-2"
-          style={{
-            width: "40px",
-            height: "40px",
-            zIndex: 10,
-            opacity: pageIndex === totalPages - 1 ? 0.5 : 1,
-          }}
-          aria-label="Next"
-        >
-          &gt;
-        </button>
+        {/* Pagination Dots */}
+        <div className="d-flex justify-content-center mt-4 gap-2">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToPage(i)}
+              className="rounded-circle border-0"
+              style={{
+                width: '8px',
+                height: '8px',
+                backgroundColor: i === pageIndex ? '#269ece' : '#e0e0e0',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s'
+              }}
+            ></button>
+          ))}
+        </div>
       </div>
-
-      {/* Pagination Dots */}
-      <div className="d-flex justify-content-center mt-4">
-        {Array.from({ length: totalPages }).map((_, i) => (
-          <span
-            key={i}
-            onClick={() => scrollToPage(i)}
-            className="mx-1 rounded-circle"
-            style={{
-              width: "8px",
-              height: "8px",
-              backgroundColor: i === pageIndex ? "#269ece" : "#e0e0e0",
-              transition: "background-color 0.3s",
-              cursor: "pointer",
-            }}
-          ></span>
-        ))}
-      </div>
-    </div>
+    </section>
   );
 }

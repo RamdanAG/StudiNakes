@@ -1,71 +1,88 @@
 import React from 'react';
 
-// Data for the categories
 const kategori = [
-  { title: 'Keperawatan', img: "/images/Trainings/ilustrasi-dokter-5sclY.jpg" }, // Placeholder image names
-  { title: 'Kebidanan', img: "/images/Trainings/ilustrasi-dokter-5sclY.jpg" },
-  { title: 'Farmasi', img: "/images/Trainings/ilustrasi-dokter-5sclY.jpg" },
-  { title: 'Kesehatan Gigi', img: "/images/Trainings/ilustrasi-dokter-5sclY.jpg" },
-  { title: 'Kedokteran', img: "/images/Trainings/ilustrasi-dokter-5sclY.jpg" },
+  { id: 1, title: 'Keperawatan', img: '/images/Trainings/keperawatan.jpg' },
+  { id: 2, title: 'Kebidanan', img: '/images/Trainings/kebidanan.jpg' },
+  { id: 3, title: 'Farmasi', img: '/images/Trainings/farmasi.jpg' },
+  { id: 4, title: 'Kesehatan Gigi', img: '/images/Trainings/kesehatan-gigi.jpg' },
+  { id: 5, title: 'Kedokteran', img: '/images/Trainings/kedokteran.jpg' },
 ];
 
-// Component to display the category cards
 export default function HomeCardKategoriBimbel() {
   return (
-    // Main container for the whole section
-    <div className="container my-5">
-      {/* Header section with title and "View All Categories" link */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h2 className="fw-bold">Kategori Bimbel</h2>
-          <p className="text-secondary">
-            Let's join our famous categories, the knowledge provided will definitely be useful for you.
-          </p>
+    <section className="py-5" style={{ backgroundColor: '#f9fafb' }}>
+      <div className="container">
+        {/* Header */}
+        <div className="d-flex justify-content-between align-items-start mb-5">
+          <div>
+            <h2 className="fw-bold mb-2">Kategori Bimbel</h2>
+            <p className="text-muted">
+              Let's join our famous categories, the knowledge provided will definitely be useful for you.
+            </p>
+          </div>
+          <a href="#" className="text-decoration-none fw-semibold" style={{ color: '#269ece' }}>
+            View All Categories <i className="bi bi-arrow-right ms-2"></i>
+          </a>
         </div>
-        <a href="#" className="text-decoration-none d-flex align-items-center fw-semibold">
-          View All Categories <span style={{ marginLeft: '5px' }}>&rarr;</span>
-        </a>
+
+        {/* Category Cards - One Row */}
+        <div className="row g-3">
+          {kategori.map((item) => (
+            <div key={item.id} className="col-12 col-sm-6 col-md-4 col-lg-2-4" style={{ flex: '0 0 calc(20% - 12px)' }}>
+              <div 
+                className="card border-0 overflow-hidden position-relative"
+                style={{
+                  height: '180px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              >
+                {/* Background Image */}
+                <img 
+                  src={item.img} 
+                  className="card-img h-100 w-100" 
+                  alt={item.title}
+                  style={{ objectFit: 'cover' }}
+                />
+
+                {/* Overlay Gradient */}
+                <div 
+                  className="position-absolute top-0 start-0 w-100 h-100"
+                  style={{
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%)'
+                  }}
+                ></div>
+
+                {/* Title */}
+                <div className="position-absolute bottom-0 start-0 end-0 p-3">
+                  <h6 className="text-white fw-bold mb-0">{item.title}</h6>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Card row using Bootstrap's flexbox utilities (d-flex and gap-3/5) for spacing and responsiveness */}
-      <div className="d-flex flex-wrap justify-content-center justify-content-lg-start" style={{ gap: '20px' }}>
-        {kategori.map((item, idx) => (
-          // Individual Card
-          // We use col-xx-auto classes in a non-Bootstrap grid context to hint at spacing
-          // and rely on custom inline styles or utility classes for fixed dimensions and spacing.
-          <div 
-            key={idx} 
-            className="card text-bg-dark border-0 overflow-hidden" 
-            style={{ 
-              width: '240px', // Adjusted width slightly for better fit, matching the image's ratio
-              height: '280px', 
-              borderRadius: '12px', // Add rounded corners
-              cursor: 'pointer',
-            }}
-          >
-            {/* The image, covering the card and set to a darker background (text-bg-dark) */}
-            <img 
-              src={item.img} 
-              className="card-img h-100 w-100" 
-              alt={item.title} 
-              style={{ objectFit: 'cover', opacity: 0.8 }} // Ensure image covers the area and is slightly dimmed
-            />
-            
-            {/* The overlay for the title */}
-            <div 
-              className="card-img-overlay d-flex flex-column justify-content-end p-3" // Push content to the bottom
-              style={{
-                background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)', // Gradient overlay at the bottom
-              }}
-            >
-              {/* The title text */}
-              <h5 className="card-title fw-bold fs-5 mb-0" style={{ color: 'white' }}>
-                {item.title}
-              </h5>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+      <style>{`
+        @media (max-width: 1200px) {
+          .col-lg-2-4 {
+            flex: 0 0 calc(25% - 12px) !important;
+          }
+        }
+        @media (max-width: 992px) {
+          .col-lg-2-4 {
+            flex: 0 0 calc(33.333% - 12px) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .col-lg-2-4 {
+            flex: 0 0 calc(50% - 12px) !important;
+          }
+        }
+      `}</style>
+    </section>
   );
 }
