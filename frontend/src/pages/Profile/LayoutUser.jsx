@@ -9,7 +9,7 @@ import Certificates from "../../components/UserProfile/Certificates"
 import OrderHistory from "../../components/UserProfile/OrderHistory"
 import ExamAttempts from "../../components/UserProfile/ExamAttempts"
 import LiveCoach from "../../components/UserProfile/LiveCoach"
-import TopNavbar from "../../components/TopNavbar";
+import Navbar from "../../components/Navbar";
 
 const LayoutUser = () => {
   const [activeTab, setActiveTab] = useState("ecourse");
@@ -37,7 +37,7 @@ const LayoutUser = () => {
 
   return (
     <>
-    <TopNavbar/>
+    <Navbar/>
     <div className="container-fluid p-4" style={{ background: "#f5f7fb" }}>
       <div className="row">
         {/* SIDEBAR */}

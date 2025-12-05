@@ -1,8 +1,8 @@
 import React from 'react'
 import HomeHeader from '../components/Home/HomeHeader'
-import HomeCardKategoriBimbel from '../components/Home/HomeCardKategoriBimbel'
-import HomeCardFeaturedTrainings from '../components/Home/HomeCardFeaturedTrainings'
-import HomeCardBukuNakes from '../components/home/HomeCardBukuNakes'
+import HomeCardKategoriBimbel from '../components/home/Card_KategoriBimbel'
+import HomeCardFeaturedTrainings from '../components/home/Card_FeaturedTrainings'
+import HomeCardBukuNakes from '../components/home/Card_BukuNakes'
 import Testimonial from '../components/home/Testimonial'
 import Footer from '../components/footer'
 
